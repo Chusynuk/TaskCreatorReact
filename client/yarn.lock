@@ -5225,6 +5225,16 @@ react-event-listener@^0.5.1:
     prop-types "^15.6.0"
     warning "^3.0.0"
 
+react-form-validator-core@0.4.1, react-form-validator-core@^0.4.1:
+  version "0.4.1"
+  resolved "https://registry.yarnpkg.com/react-form-validator-core/-/react-form-validator-core-0.4.1.tgz#fba6db1063b4816eb791794de204672e111e12ba"
+
+react-material-ui-form-validator@^1.0.7:
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/react-material-ui-form-validator/-/react-material-ui-form-validator-1.0.7.tgz#103c68434b05d278456f15886c9fdc982c273e38"
+  dependencies:
+    react-form-validator-core "0.4.1"
+
 react-scripts@1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/react-scripts/-/react-scripts-1.1.0.tgz#0c94b2b2e14cff2dad8919397901b5edebeba511"
