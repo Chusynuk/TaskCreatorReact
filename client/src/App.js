@@ -8,7 +8,7 @@ class App extends Component {
     return (
     <MuiThemeProvider>
       <div className="App">
-        <TaskForm></TaskForm>
+        <TaskForm/>
       </div>
     </MuiThemeProvider>);
   }

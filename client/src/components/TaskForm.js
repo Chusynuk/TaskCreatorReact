@@ -4,7 +4,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import ValidatorForm from 'react-form-validator-core/lib/ValidatorForm';
 import TextValidator from 'react-material-ui-form-validator/lib/TextValidator';
 import Dropdown from './Dropdown';
-// import MyMethods from '../utils/myMethods';
+import axios from 'axios';
 
 
 
@@ -27,6 +27,7 @@ class TaskForm extends React.Component {
         recipientPhone: ''
       },
       submitted: false,
+      countries: []
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -44,6 +45,18 @@ class TaskForm extends React.Component {
       setTimeout(() => this.setState({ submitted: false }), 5000);
     });
   }
+
+componentDidMount(){
+  axios.get('http://localhost:5000/countries')
+    .then(response => {
+      this.setState({
+        countries: response.data
+      })
+    })
+    .catch(error => {
+      console.log(error);
+    })
+}
 
   render() {
     const { formData, submitted } = this.state; //destructuring
@@ -80,7 +93,7 @@ class TaskForm extends React.Component {
                     errorMessages={['this field is required']}
                 />
                 <br />
-                <Dropdown></Dropdown>
+                <Dropdown countries={this.state.countries}/>
                 <br/>
                 <TextValidator
                     floatingLabelText="Recipient country"
