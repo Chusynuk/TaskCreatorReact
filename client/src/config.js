@@ -1,5 +1,5 @@
 var config = {
-  apiRoot: '../../server.js',
+  apiRoot: 'localhost:5000',
 };
 
 export default config;

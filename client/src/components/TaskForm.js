@@ -3,7 +3,8 @@ import DatePicker from 'material-ui/DatePicker';
 import RaisedButton from 'material-ui/RaisedButton';
 import ValidatorForm from 'react-form-validator-core/lib/ValidatorForm';
 import TextValidator from 'react-material-ui-form-validator/lib/TextValidator';
-import Dropdown from './Dropdown';
+import DropDown from './Dropdown';
+import Success from './Success';
 import axios from 'axios';
 
 
@@ -19,31 +20,55 @@ class TaskForm extends React.Component {
 
     this.state = {
       formData: {
-        recipientName: '',
-        recipientStreet: '',
-        recipientCity: '',
-        recipientCountry: '',
-        recipientZipcode: '',
-        recipientPhone: ''
+        delivery_at: new Date(),
+        recipient: {
+          name: '',
+          street: '',
+          city: '',
+          country: '',
+          zipcode: '',
+          phone: '',
+        }
       },
       submitted: false,
       countries: []
+
     };
 
     this.handleChange = this.handleChange.bind(this);
+    this.handleCountryChange = this.handleCountryChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   handleChange(event) {
-    const { formData } = this.state;
-    formData[event.target.name] = event.target.value;
-    this.setState({ formData });
+    const { recipient } = this.state.formData;
+    recipient[event.target.name] = event.target.value;
+    this.setState({ recipient });
+  }
+
+  handleCountryChange(country) {
+    this.setState({
+      formData: {
+        recipient: {
+          country
+        }
+      }
+    });
+    console.log(this.state.formData.recipient.country)
   }
 
   handleSubmit() {
+    const { formData } = this.state;
+
     this.setState({ submitted: true }, () => {
       setTimeout(() => this.setState({ submitted: false }), 5000);
     });
+    axios
+    .post('http://localhost:5000/tasks', formData)
+    .then(res => {
+      console.log(res);
+    })
+    .catch(err => console.error(err));
   }
 
 componentDidMount(){
@@ -59,18 +84,17 @@ componentDidMount(){
 }
 
   render() {
-    const { formData, submitted } = this.state; //destructuring
+    const { formData, submitted } = this.state; //Using destructuring, this saves having to write "this.state.X" everywhere.
     return (<div>
       <ValidatorForm
                 ref="form"
-                onSubmit={this.handleSubmit}
-            >
-              <DatePicker style={divStyle} autoOk={true} hintText="Delivery at" mode="landscape"/>
+                onSubmit={this.handleSubmit}>
+              <DatePicker style={divStyle} autoOk={true} hintText="Delivery at" mode="landscape" value={this.state.formData.delivery_at} onChange={this.handleChange} />
                 <TextValidator
                     floatingLabelText="Recipient name"
                     onChange={this.handleChange}
-                    name="recipientName"
-                    value={formData.recipientName}
+                    name="name"
+                    value={formData.recipient.name}
                     validators={['required']}
                     errorMessages={['this field is required']}
                 />
@@ -78,8 +102,8 @@ componentDidMount(){
                 <TextValidator
                     floatingLabelText="Recipient street"
                     onChange={this.handleChange}
-                    name="recipientStreet"
-                    value={formData.recipientStreet}
+                    name="street"
+                    value={formData.recipient.street}
                     validators={['required']}
                     errorMessages={['this field is required']}
                 />
@@ -87,28 +111,17 @@ componentDidMount(){
                 <TextValidator
                     floatingLabelText="Recipient city"
                     onChange={this.handleChange}
-                    name="recipientCity"
-                    value={formData.recipientCity}
+                    name="city"
+                    value={formData.recipient.city}
                     validators={['required']}
                     errorMessages={['this field is required']}
                 />
-                <br />
-                <Dropdown countries={this.state.countries}/>
-                <br/>
-                <TextValidator
-                    floatingLabelText="Recipient country"
-                    onChange={this.handleChange}
-                    name="recipientCountry"
-                    value={formData.recipientCountry}
-                    validators={['required']}
-                    errorMessages={['this field is required']}
-                />
-                <br />
+                <DropDown countries={this.state.countries} name="country" value={formData.recipient.country} handleChange={this.handleCountryChange} />
                 <TextValidator
                     floatingLabelText="Recipient zipcode"
                     onChange={this.handleChange}
-                    name="recipientZipcode"
-                    value={formData.recipientZipcode}
+                    name="zipcode"
+                    value={formData.recipient.zipcode}
                     validators={['required']}
                     errorMessages={['this field is required']}
                 />
@@ -116,13 +129,14 @@ componentDidMount(){
                 <TextValidator
                     floatingLabelText="Recipient phone"
                     onChange={this.handleChange}
-                    name="recipientPhone"
-                    value={formData.recipientPhone}
+                    name="phone"
+                    value={formData.recipient.phone}
                     validators={['required']}
                     errorMessages={['this field is required']}
                 />
                 <br />
                 <RaisedButton
+                    onClick={() => this.handleSubmit()}
                     type="submit"
                     label={
                         (submitted && 'Your form is submitted!')
