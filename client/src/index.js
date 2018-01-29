@@ -4,13 +4,13 @@ import ReactDOM from 'react-dom';
 // import { BrowserRouter as Router } from 'react-router-dom';
 import './index.css';
 // import MuiThemeProvider from '../node_modules/material-ui/styles/MuiThemeProvider';
-import AppRoutes from './routes';
+// import AppRoutes from './routes';
 import App from './App';
 import registerServiceWorker from './registerServiceWorker';
 
 
 ReactDOM.render(
-  <AppRoutes>
+
 <App/>
-</AppRoutes>, document.getElementById('root'));
+, document.getElementById('root'));
 registerServiceWorker();
