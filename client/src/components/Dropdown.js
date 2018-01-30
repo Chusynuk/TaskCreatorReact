@@ -9,31 +9,37 @@ export default class DropDown extends React.Component {
     this.state = {
       countries: []
     };
+
   }
+
   componentWillMount() {
+    const processResponse = this.processResponse.bind(this);
     axios
       .get("http://localhost:5000/countries")
-      .then(response => {
-        this.setState({
-          countries: response.data
-        });
-      })
+      .then(response => processResponse(response))
       .catch(error => {
         console.log(error);
       });
   }
+
+  processResponse(response) {
+    this.setState({ countries: response.data });
+  }
+
+  handleChange = (event, index, value) => this.setState({value});
+
   render() {
     const { countries } = this.state; //Destructuring
     return (
       <div>
-        <SelectField value={this.props.value} name={this.props.name}>
+        <SelectField
+          floatingLabelText="Country"
+          value={this.state.countries}
+          name={this.props.name}
+          onChange={this.props.handleChange}
+        >
           {countries.map(({ id, name }, index) => (
-            <MenuItem
-              value={id}
-              primaryText={name}
-              key={index}
-              onClick={() => this.props.handleChange(id)}
-            />
+            <MenuItem value={id} primaryText={name} key={index} />
           ))}
         </SelectField>
       </div>

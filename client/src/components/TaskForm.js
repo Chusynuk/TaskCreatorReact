@@ -3,7 +3,7 @@ import RaisedButton from "material-ui/RaisedButton";
 import ValidatorForm from "react-form-validator-core/lib/ValidatorForm";
 import TextValidator from "react-material-ui-form-validator/lib/TextValidator";
 import DropDown from "./Dropdown";
-import DateValidator from "./DateValidator";
+import DateCalendar from "./DateValidator";
 import axios from "axios";
 
 const formStyle = {
@@ -31,7 +31,7 @@ class TaskForm extends React.Component {
     };
 
     this.handleChange = this.handleChange.bind(this);
-    //this.handleCountryChange = this.handleCountryChange.bind(this);
+    this.handleCountryChange = this.handleCountryChange.bind(this);
     this.handleDateChange = this.handleDateChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -42,24 +42,37 @@ class TaskForm extends React.Component {
     this.setState({ recipient });
   }
 
-  // handleCountryChange(country, index, value) {
-  //   this.setState({
-  //     formData: {
-  //       recipient: {
-  //         country
-  //       }
-  //     }
-  //   });
-  //   console.log(this.state.formData.recipient.country);
-  // }
-
-  handleDateChange(date) {
+  handleDateChange = (event, date) => {
     this.setState({
       formData: {
         delivery_at: date
       }
     });
     console.log(date);
+  };
+
+  handleCountryChange = (country,index, value) => {
+    this.setState({
+      formData: {
+        recipient: {
+          country
+        }
+      }
+    });
+  };
+
+  componentWillMount() {
+    const processResponse = this.processResponse.bind(this);
+    axios
+      .get("http://localhost:5000/countries")
+      .then(response => processResponse(response))
+      .catch(error => {
+        console.log(error);
+      });
+  }
+
+  processResponse(response) {
+    this.setState({ countries: response.data });
   }
 
   handleSubmit() {
@@ -85,10 +98,10 @@ class TaskForm extends React.Component {
           ref="form"
           onSubmit={this.handleSubmit}
         >
-          <DateValidator
+          <DateCalendar //Datepicker child component
             name="delivery_at"
             value={formData.delivery_at}
-            onChange={this.handleDateChange}
+            handleDateChange={this.handleDateChange}
           />
           <TextValidator
             floatingLabelText="Recipient name"
@@ -118,10 +131,11 @@ class TaskForm extends React.Component {
           />
           <br />
           <DropDown //Here is the Dropdown child component
-            countries={this.state.countries}
+            country={this.state.countries}
             name="countries"
             value={formData.recipient.country}
             handleChange={this.handleCountryChange}
+            primaryText={this.state.name}
           />
           <TextValidator
             floatingLabelText="Recipient zipcode"

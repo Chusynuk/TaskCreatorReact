@@ -7,7 +7,7 @@ app.use(bodyParser.json());
 
 /**
  * We have to add the Access-Control-Allow-Origin: *
- * since we will be receiving a cross-origin request
+ * since we will be receiving a cross-origin request https://enable-cors.org/server_expressjs.html
  * from the frontend, which is running on a different port.
  */
 app.use((req, res, next) => {

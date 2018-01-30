@@ -4,13 +4,12 @@ import DatePicker from "material-ui/DatePicker";
 class DateCalendar extends React.Component {
   constructor(props) {
     super(props);
-
     this.state = {
       delivery_at: null
     };
   }
 
-  handleChange = (event, date) => {
+  handleDateChange = (event, date) => {
     this.setState({
       delivery_at: date
     });
@@ -18,14 +17,14 @@ class DateCalendar extends React.Component {
   };
 
   render() {
+    // const{ delivery_at } = this.state;
     return (
       <DatePicker
         hintText="Delivery At"
         name={this.props.name}
-        value={this.props.value}
-        autoOk={true}
         value={this.state.delivery_at}
-        onChange={this.handleChange}
+        autoOk={true}
+        onChange={this.handleDateChange}
       />
     );
   }
