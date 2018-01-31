@@ -2,7 +2,7 @@ import React from "react";
 import DatePicker from "material-ui/DatePicker";
 
 // class DateCalendar extends React.Component {
-const DateCalendar = props => { // functional component
+const DateCalendar = props => { // functional component   
   // constructor(props) {
   //   super(props);
   //   this.state = {
