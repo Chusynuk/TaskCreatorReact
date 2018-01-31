@@ -9,7 +9,6 @@ export default class DropDown extends React.Component {
     this.state = {
       countries: []
     };
-
   }
 
   componentWillMount() {
@@ -26,7 +25,11 @@ export default class DropDown extends React.Component {
     this.setState({ countries: response.data });
   }
 
-  handleChange = (event, index, value) => this.setState({value});
+  // handleChange = e => {
+  //   this.setState({ countries: e.target.value }, () => {
+  //     this.onChange(e.target.value);
+  //   });
+  // };
 
   render() {
     const { countries } = this.state; //Destructuring
@@ -34,10 +37,10 @@ export default class DropDown extends React.Component {
       <div>
         <SelectField
           floatingLabelText="Country"
-          value={this.state.countries}
+          value={this.props.value}
           name={this.props.name}
           onChange={this.props.handleChange}
-        >
+        >{this.props.children}
           {countries.map(({ id, name }, index) => (
             <MenuItem value={id} primaryText={name} key={index} />
           ))}

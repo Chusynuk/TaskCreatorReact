@@ -31,7 +31,7 @@ class TaskForm extends React.Component {
     };
 
     this.handleChange = this.handleChange.bind(this);
-    this.handleCountryChange = this.handleCountryChange.bind(this);
+    //this.handleCountryChange = this.handleCountryChange.bind(this);
     this.handleDateChange = this.handleDateChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -42,38 +42,41 @@ class TaskForm extends React.Component {
     this.setState({ recipient });
   }
 
-  handleDateChange = (event, date) => {
+  // handleDateChange = country => {
+  //   this.setState({
+  //     formData: {
+  //       delivery_at
+  //     }
+  //   });
+  // };
+  // handleDateChange(event, date) {
+  //   this.setState(prevState => ({
+  //     formData: {
+  //       ...prevState.formData,
+  //       delivery_at: date
+  //     }
+  //   }));
+  //   console.log(date);
+  // }
+
+  handleDateChange (event, date)  {
     this.setState({
-      formData: {
+
         delivery_at: date
-      }
+
     });
     console.log(date);
   };
 
-  handleCountryChange = (country,index, value) => {
-    this.setState({
-      formData: {
-        recipient: {
-          country
-        }
-      }
-    });
-  };
-
-  componentWillMount() {
-    const processResponse = this.processResponse.bind(this);
-    axios
-      .get("http://localhost:5000/countries")
-      .then(response => processResponse(response))
-      .catch(error => {
-        console.log(error);
-      });
-  }
-
-  processResponse(response) {
-    this.setState({ countries: response.data });
-  }
+  // handleCountryChange = country => {
+  //   this.setState({
+  //     formData: {
+  //       recipient: {
+  //         country
+  //       }
+  //     }
+  //   });
+  // };
 
   handleSubmit() {
     const { formData } = this.state;
@@ -101,7 +104,8 @@ class TaskForm extends React.Component {
           <DateCalendar //Datepicker child component
             name="delivery_at"
             value={formData.delivery_at}
-            handleDateChange={this.handleDateChange}
+            handleChangeDate={this.handleDateChange}
+            validators={["required"]}
           />
           <TextValidator
             floatingLabelText="Recipient name"
@@ -131,7 +135,7 @@ class TaskForm extends React.Component {
           />
           <br />
           <DropDown //Here is the Dropdown child component
-            country={this.state.countries}
+            // country={this.state.countries}
             name="countries"
             value={formData.recipient.country}
             handleChange={this.handleCountryChange}
