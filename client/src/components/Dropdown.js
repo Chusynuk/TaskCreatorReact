@@ -7,7 +7,8 @@ export default class DropDown extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      countries: []
+      countries: [],
+      value: ""
     };
   }
 
@@ -25,24 +26,23 @@ export default class DropDown extends React.Component {
     this.setState({ countries: response.data });
   }
 
-  // handleChange = e => {
-  //   this.setState({ countries: e.target.value }, () => {
-  //     this.onChange(e.target.value);
-  //   });
-  // };
-
   render() {
     const { countries } = this.state; //Destructuring
     return (
       <div>
         <SelectField
           floatingLabelText="Country"
-          value={this.props.value}
+          value={this.state.value}
           name={this.props.name}
-          onChange={this.props.handleChange}
-        >{this.props.children}
+          onChange={evt => this.props.handleChange(this.state.value)}
+        >
           {countries.map(({ id, name }, index) => (
-            <MenuItem value={id} primaryText={name} key={index} />
+            <MenuItem
+              value={id}
+              primaryText={name}
+              key={index}
+              onClick={() => this.setState({ value: id })}
+            />
           ))}
         </SelectField>
       </div>
